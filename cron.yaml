@@ -1,0 +1,4 @@
+cron:
+- description: update database
+  url: /fetcher
+  schedule: every 1 hours

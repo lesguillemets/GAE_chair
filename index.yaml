@@ -1,0 +1,6 @@
+indexes:
+- kind: AirData
+  ancestor: yes
+  properties:
+  - name: datetime
+    direction: desc
