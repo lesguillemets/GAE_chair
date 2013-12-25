@@ -8,12 +8,15 @@ handlers:
 - url: /fetcher
   script: fetcher.py
   login: admin
-- url: /robots.txt
+- url: /robots\.txt
   static_files: robots/robots.txt
   upload: robots/robots.txt
-- url: /favicon.ico
+- url: /favicon\.ico
   static_files: media/favicon.ico
   upload: media/favicon.ico
+- url: /apple-touch-icon\.png
+  static_files: media/apple-touch-icon.png
+  upload: media/apple-touch-icon.png
 - url: /*
   script: graph.application
 
