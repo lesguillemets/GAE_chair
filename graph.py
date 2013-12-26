@@ -57,6 +57,7 @@ class DataPlot(object):
             plt.ylabel("PM 2.5 [micro g / m^3]")
             ax = plt.axes()
             ax.yaxis.grid(True)
+            ax.xaxis.grid(True)
             rv = StringIO.StringIO()
             plt.savefig(rv, format='png')
             return """<img src="data:image/png;base64,{}"/>\n<br />\n""".format(
