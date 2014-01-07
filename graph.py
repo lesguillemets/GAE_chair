@@ -2,7 +2,7 @@
 # encoding:utf-8
 
 import StringIO, cgi, webapp2
-import matplotlib, matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from google.appengine.ext import ndb
 from fetcher import AirData, databook_key 
 
@@ -80,9 +80,9 @@ class DataPlot(object):
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write(MAIN_BODY.format(
-            '"selected"', "", "", "", ""))
+            "", "", "selected='selected'", "", ""))
         plotter = DataPlot()
-        self.response.write(plotter.mkplot(-1))
+        self.response.write(plotter.mkplot(120))
         self.createtable(plotter)
         #self.response.write("Update information: {}\n".format(plotter.latest))
         self.response.write(MAIN_FOOTER)
