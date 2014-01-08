@@ -1,5 +1,5 @@
 application: my-app-id
-version: 1
+version: 2-dev
 runtime: python27
 api_version: 1
 threadsafe: false

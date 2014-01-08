@@ -25,8 +25,19 @@ MAIN_BODY = """\
 		<option value=120 {}>last 120 hours </option>
 		<option value=48 {}>last 48 hours</option>
 		<option value=24 {}>last 24 hours</option>
-		<input type="submit" value="Set">
 	</select>
+	<table>
+		<tr><td align="center">Beijing</td><td align="center">Chengdu</td>
+            <td align="center">Guangzhou</td><td align="center">Shanghai</td><td align="center">Shenyang</td></tr>
+		<tr>
+			<td align="center"><input type="checkbox" name="Beijing" value="True" {}></td>
+			<td align="center"><input type="checkbox" name="Chengdu" value="True" {}></td>
+			<td align="center"><input type="checkbox" name="Guangzhou" value="True" {}></td>
+			<td align="center"><input type="checkbox" name="Shanghai" value="True" {}></td>
+			<td align="center"><input type="checkbox" name="Shenyang" value="True" {}></td>
+		</tr>
+	</table>
+    <input type="submit" value="Set">
 </form>
 </p>
 
@@ -46,21 +57,21 @@ class DataPlot(object):
     def __init__(self):
         self.latest = {}
     
-    def mkplot(self, n):
+    def mkplot(self, n, cities = CITIES):
         plt.title("China Air Data: PM2.5")
-        for city in CITIES:
+        for city in cities:
             data = self.getvalue(city, n)
             plt.plot(list(data))
         try:
             plt.ylim(ymin=0)
-            plt.legend(CITIES, loc='upper right')
+            plt.legend(cities, loc='upper right')
             plt.ylabel("PM 2.5 [micro g / m^3]")
             ax = plt.axes()
             ax.yaxis.grid(True)
             ax.xaxis.grid(True)
             rv = StringIO.StringIO()
             plt.savefig(rv, format='png')
-            return """<img src="data:image/png;base64,{}"/>\n<br />\n""".format(
+            return """<center><img src="data:image/png;base64,{}"/>\n<br />\n</center>""".format(
                 rv.getvalue().encode("base64").strip())
         finally:
             plt.clf()
@@ -80,7 +91,8 @@ class DataPlot(object):
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write(MAIN_BODY.format(
-            "", "", "selected='selected'", "", ""))
+            "", "", "selected='selected'", "", "",
+            "checked", "checked", "checked", "checked", "checked"))
         plotter = DataPlot()
         self.response.write(plotter.mkplot(120))
         self.createtable(plotter)
@@ -90,9 +102,17 @@ class MainHandler(webapp2.RequestHandler):
     def post(self):
         n = int(self.request.get('xrange'))
         selection=list(map(lambda x: 'selected="selected"' if x == n else "", CHOISES))
-        self.response.write(MAIN_BODY.format(*selection))
+        #cities = { i:self.request.get(i) for i in CITIES}
+        cities = [city for city in CITIES if self.request.get(city)]
+        def ischecked(city):
+            return city in cities
+        checked = ["checked" if ischecked(city) else '' for city in CITIES]
+        self.response.write(MAIN_BODY.format(*(selection + checked)))
         plotter = DataPlot()
-        self.response.write(plotter.mkplot(n))
+        self.response.write(plotter.mkplot(n, cities))
+        for city in CITIES:
+            if not ischecked(city):
+                plotter.getvalue(city, 1) # to know the latest data.
         self.createtable(plotter)
         #self.response.write("<br />Update information: {}\n".format(plotter.latest))
         self.response.write(MAIN_FOOTER)
