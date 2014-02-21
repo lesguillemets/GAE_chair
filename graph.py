@@ -75,7 +75,7 @@ class DataPlot(object):
                 rv.getvalue().encode("base64").strip())
         finally:
             plt.clf()
-
+    
     def getvalue(self, cityname, n):
         data_query = AirData.query(
             ancestor = databook_key(cityname)).order(-AirData.datetime)

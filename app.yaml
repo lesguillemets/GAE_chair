@@ -1,5 +1,5 @@
 application: my-app-id
-version: 2-dev
+version: 3
 runtime: python27
 api_version: 1
 threadsafe: false
@@ -8,6 +8,8 @@ handlers:
 - url: /fetcher
   script: fetcher.py
   login: admin
+- url: /jsgraph
+  script: graph_js.application
 - url: /robots\.txt
   static_files: robots/robots.txt
   upload: robots/robots.txt
