@@ -77,7 +77,6 @@ def pm25_to_category(conc):
     elif conc <= 12:
         return 1
     elif conc <= 35.4:
-       return ("Moderate", "#FFFF00")
         return 2
     elif conc <= 55.4:
         return 3
