@@ -13,6 +13,7 @@ MAIN_BODY = """\
 <html>
 <head>
 <title>Air Log Viewer for WhiteDandelion</title>
+<link style="text/css" rel="stylesheet" href="./css/airrank.css"/>
 </head>
 <body>
 <h2>WhiteDandelion air data logger</h2>
@@ -120,41 +121,40 @@ class MainHandler(webapp2.RequestHandler):
     def createtable(self, plotter):
         self.response.write(self.tableheader)
         for city in sorted(plotter.latest.keys()):
-            category = pm25_to_category_and_color(plotter.latest[city].value)
+            category = pm25_to_category(plotter.latest[city].value)
             self.response.write(self.tablerow.format(
                 city, plotter.latest[city].value, 
-                category[1], category[0],
-                plotter.latest[city].datetime))
+                category, plotter.latest[city].datetime))
         self.response.write(self.tablefooter)
     
     tableheader = u"""\
 <center>The latest data:
-<table border=1 frame="hsides">
+<table id="conctable">
 	<tr><th> City </th> <th> PM 2.5 (μg/m^3)</th> <th>Category</th> <th>Last Updated</th></tr>\n
 """
     
     tablerow = """\
-	<tr><td>{}</td> <td align="right">{}</td> <td align="center" bgcolor="{}">{} </td> <td>{}</td></tr>\n
+	<tr><td>{}</td> <td class="conc">{}</td> <td class="aqi_{}"></td><td>{}</td></tr>\n
 """
     tablefooter = "</table>\n</center>"
     
 
-def pm25_to_category_and_color(conc):
+def pm25_to_category(conc):
     if conc < 0:
-        return ("None", "#ffffff")
+        return 0
     elif conc <= 12:
-        return ("Good", "#00e400")
+        return 1
     elif conc <= 35.4:
-        return ("Moderate", "FFFF00")
+        return 2
     elif conc <= 55.4:
-        return ('<font color="#ffffff">Unhealthy for Sensitive Groups</font>', "#FF7E00")
+        return 3
     elif conc <= 150.4:
-        return ('<font color="#ffffff">Unhealty</font>', "#FF0000")
+        return 4
     elif conc <= 250.4:
-        return ('<font color="#ffffff">Very Unhealthy</font>', "#99004c")
+        return 5
     elif conc <= 500.4:
-        return ('<font color="#ffffff">Hazardous</font>', "#4c00256")
+        return 6
     else:
-        return ('<font color="#ffffff">Beyond Index</font>', "575757")
+        return 7
 
 application = webapp2.WSGIApplication([('/', MainHandler)], debug=True)

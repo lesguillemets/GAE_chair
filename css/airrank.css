@@ -1,0 +1,82 @@
+#conctable {
+	border: 1px solid blue;
+}
+#conctable th, #conctable td {
+	border: 1px solid black;
+}
+
+.conc {
+	text-align: right;
+}
+
+.aqi_0 {
+	color: #000000;
+	background-color: #ffffff;
+	text-align: center;
+}
+.aqi_0:after {
+	content: "None";
+}
+
+.aqi_1 {
+	color: #000000;
+	background-color: #00e400;
+	text-align: center;
+}
+.aqi_1:after {
+	content: "Good"
+}
+
+.aqi_2 {
+	color:#000000;
+	background-color: #FFFF00;
+	text-align: center;
+}
+.aqi_2:after {
+	content: "Moderate"
+}
+
+.aqi_3 {
+	color: #ffffff;
+	background-color: #FF7E00;
+	text-align: center;
+}
+.aqi_3:after {
+	content: "Unhealthy for sensitive groups"
+}
+
+.aqi_4 {
+	color: #ffffff;
+	background-color: #FF0000;
+	text-align: center;
+}
+.aqi_4:after {
+	content: "Unhealthy"
+}
+
+.aqi_5 {
+	color: #ffffff;
+	background-color: #99004c;
+	text-align: center;
+}
+.aqi_5:after {
+	content: "Very Unhealthy"
+}
+
+.aqi_6 {
+	color: #ffffff;
+	background-color: #4c0026;
+	text-align: center;
+}
+.aqi_6:after{
+	content: "Hazardous"
+}
+
+.aqi_7 {
+	color: #ffffff;
+	background-color: #575757;
+	text-align: center;
+}
+.aqi_7:after {
+	content: "Beyond Index"
+}
