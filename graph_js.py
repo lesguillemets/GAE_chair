@@ -76,17 +76,17 @@ def pm25_to_category_and_color(conc):
     elif conc <= 12:
         return ("Good", "#00e400")
     elif conc <= 35.4:
-        return ("Moderate", "FFFF00")
+        return ("Moderate", "#FFFF00")
     elif conc <= 55.4:
         return ('<font color="#ffffff">Unhealthy for Sensitive Groups</font>', "#FF7E00")
     elif conc <= 150.4:
-        return ('<font color="#ffffff">Unhealty</font>', "#FF0000")
+        return ('<font color="#ffffff">Unhealthy</font>', "#FF0000")
     elif conc <= 250.4:
         return ('<font color="#ffffff">Very Unhealthy</font>', "#99004c")
     elif conc <= 500.4:
-        return ('<font color="#ffffff">Hazardous</font>', "#4c00256")
+        return ('<font color="#ffffff">Hazardous</font>', "#4c0026")
     else:
-        return ('<font color="#ffffff">Beyond Index</font>', "575757")
+        return ('<font color="#ffffff">Beyond Index</font>', "#575757")
 
 
 class MainHandler(webapp2.RequestHandler):
