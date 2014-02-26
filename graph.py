@@ -58,12 +58,14 @@ class DataPlot(object):
     
     def __init__(self):
         self.latest = {}
+        self.data = {}
     
     def mkplot(self, n, cities = CITIES):
         plt.title("China Air Data: PM2.5")
         for city in cities:
-            data = self.fetchdata(city, n)
-            plt.plot(list(data))
+            if city not in self.data or len(self.data[city]) < n:
+                self.fetchdata(city, n)
+            plt.plot(self.data[city])
         try:
             plt.ylim(ymin=0)
             plt.legend(cities, loc='upper right')
@@ -83,10 +85,23 @@ class DataPlot(object):
             ancestor = databook_key(cityname)).order(-AirData.datetime)
         self.latest[cityname] = data_query.fetch(1)[0]
         if n == -1:
-            return [d.value for d in data_query][::-1]
+            self.data[cityname] = [d.value for d in data_query][::-1]
         else:
             data = data_query.fetch(n)
-            return [d.value for d in data][::-1]
+            self.data[cityname] =  [d.value for d in data][::-1]
+    
+    def calcmean(self, cityname, hours=24):
+        # fetch data if this instance doesn't have enough data.
+        if cityname not in self.data or len(self.data[cityname]) < hours:
+            self.fetchdata(cityname, hours)
+        # applicable_data : meaningful data for the last [hours] hours.
+        applicable_data = [
+            datum for datum in self.data[cityname][:-hours] if datum >= 0
+        ]
+        if applicable_data: # if there's been any meaningful data
+            return float(sum(applicable_data))/len(applicable_data)
+        else:
+            return None
 
 
 
@@ -123,19 +138,22 @@ class MainHandler(webapp2.RequestHandler):
         self.response.write(self.tableheader)
         for city in sorted(plotter.latest.keys()):
             category = pm25_to_category(plotter.latest[city].value)
+            means = plotter.calcmean(city) or -999
+            means_category = pm25_to_category(means)
             self.response.write(self.tablerow.format(
-                city, plotter.latest[city].value, 
-                category, plotter.latest[city].datetime))
+                city, plotter.latest[city].value, category,
+                means, means_category,
+                plotter.latest[city].datetime))
         self.response.write(self.tablefooter)
     
     tableheader = u"""\
 <center>The latest data:
 <table id="conctable">
-	<tr><th> City </th> <th> PM 2.5 (μg/m^3)</th> <th>Category</th> <th>Last Updated</th></tr>\n
+	<tr><th> City </th> <th> PM 2.5 (μg/m^3)</th> <th>Category</th> <th>Mean for last 24 hours</th> <th>Category</th> <th>Last Updated</th></tr>\n
 """
     
     tablerow = """\
-	<tr><td>{}</td> <td class="conc">{}</td> <td class="aqi_{}"></td><td>{}</td></tr>\n
+    <tr><td>{}</td> <td class="conc">{}</td> <td class="aqi_{}"></td><td class="conc">{:.3f}</td><td class="aqi_{}"></td><td>{}</td></tr>\n
 """
     tablefooter = "</table>\n</center>"
     
