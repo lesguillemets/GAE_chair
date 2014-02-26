@@ -62,7 +62,7 @@ class DataPlot(object):
     def mkplot(self, n, cities = CITIES):
         plt.title("China Air Data: PM2.5")
         for city in cities:
-            data = self.getvalue(city, n)
+            data = self.fetchdata(city, n)
             plt.plot(list(data))
         try:
             plt.ylim(ymin=0)
@@ -78,7 +78,7 @@ class DataPlot(object):
         finally:
             plt.clf()
     
-    def getvalue(self, cityname, n):
+    def fetchdata(self, cityname, n):
         data_query = AirData.query(
             ancestor = databook_key(cityname)).order(-AirData.datetime)
         self.latest[cityname] = data_query.fetch(1)[0]

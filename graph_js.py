@@ -48,7 +48,7 @@ class DataPlot(object):
     def mkplot(self, n, cities = CITIES):
         data = {}
         for city in cities:
-            data[city] = self.getvalue(city, n)
+            data[city] = self.fetchdata(city, n)
         datastring = '["hours ago", '
         for city in cities:
             datastring += '"{}", '.format(city)
@@ -61,7 +61,7 @@ class DataPlot(object):
             datastring += "],"
         return datastring
     
-    def getvalue(self, cityname, n):
+    def fetchdata(self, cityname, n):
         data_query = AirData.query(
             ancestor = databook_key(cityname)).order(-AirData.datetime)
         self.latest[cityname] = data_query.fetch(1)[0]
