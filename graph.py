@@ -55,6 +55,7 @@ MAIN_FOOTER = """\
 CITIES = ("Beijing" , "Chengdu", "Guangzhou", "Shanghai", "Shenyang")
 
 class DataPlot(object):
+    
     def __init__(self):
         self.latest = {}
     
@@ -82,10 +83,10 @@ class DataPlot(object):
             ancestor = databook_key(cityname)).order(-AirData.datetime)
         self.latest[cityname] = data_query.fetch(1)[0]
         if n == -1:
-            return reversed([d.value for d in data_query])
+            return [d.value for d in data_query][::-1]
         else:
             data = data_query.fetch(n)
-            return reversed([d.value for d in data])
+            return [d.value for d in data][::-1]
 
 
 

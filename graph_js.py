@@ -41,6 +41,7 @@ HTML_TAIL = """\
 CITIES = ("Beijing" , "Chengdu", "Guangzhou", "Shanghai", "Shenyang")
 
 class DataPlot(object):
+    
     def __init__(self):
         self.latest = {}
     
