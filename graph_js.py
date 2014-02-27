@@ -78,7 +78,7 @@ class DataPlot(object):
             self.fetchdata(cityname, hours)
         # applicable_data : meaningful data for the last [hours] hours.
         applicable_data = [
-            datum for datum in self.data[cityname][:-hours] if datum >= 0
+            datum for datum in self.data[cityname][-hours:] if datum >= 0
         ]
         if applicable_data: # if there's been any meaningful data
             return float(sum(applicable_data))/len(applicable_data)

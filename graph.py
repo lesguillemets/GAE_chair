@@ -96,7 +96,7 @@ class DataPlot(object):
             self.fetchdata(cityname, hours)
         # applicable_data : meaningful data for the last [hours] hours.
         applicable_data = [
-            datum for datum in self.data[cityname][:-hours] if datum >= 0
+            datum for datum in self.data[cityname][-hours:] if datum >= 0
         ]
         if applicable_data: # if there's been any meaningful data
             return float(sum(applicable_data))/len(applicable_data)
@@ -129,7 +129,7 @@ class MainHandler(webapp2.RequestHandler):
         self.response.write(plotter.mkplot(n, cities))
         for city in CITIES:
             if not ischecked(city):
-                plotter.getvalue(city, 1) # to know the latest data.
+                plotter.fetchdata(city, 1) # to know the latest data.
         self.createtable(plotter)
         #self.response.write("<br />Update information: {}\n".format(plotter.latest))
         self.response.write(MAIN_FOOTER)
